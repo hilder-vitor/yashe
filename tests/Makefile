@@ -11,12 +11,11 @@
 GOOGLE_DIR = googletest
 
 SRC_DIR = ../src
+YASHE_LIB=$(SRC_DIR)/yashe.a
 
 INCLUDES = -I/home/vitor/mylibs/gmp/include -I/home/vitor/mylibs/mpfr/include  -I/home/vitor/mylibs/flint/include -I$(SRC_DIR)
 LDFLAGS 	= 	-L/opt/local/lib   -L/home/vitor/mylibs/flint/lib/ -L/home/vitor/mylibs/gmp/lib/ -L/home/vitor/mylibs/mpfr/lib/ -lgmp -lgmpxx -lcrypto -lm -lmpfr -lflint -pthread -fopenmp
 
-
-YASHE_OBJ=$(SRC_DIR)/Plaintext.o $(SRC_DIR)/RealNumberPlaintext.o $(SRC_DIR)/Ciphertext.o $(SRC_DIR)/RealNumberCiphertext.o $(SRC_DIR)/Sampler.o $(SRC_DIR)/Entropy.o $(SRC_DIR)/Yashe.o $(SRC_DIR)/timing.o
 
 CPPFLAGS += -isystem $(GOOGLE_DIR)/include
 CXXFLAGS += -g -Wall -Wextra -pthread -std=c++11
@@ -35,21 +34,21 @@ $(GOOGLE_DIR)/google_test_lib: $(GOOGLE_TEST_SRC)
 	$(CXX) $(CPPFLAGS) -I$(GOOGLE_DIR) $(CXXFLAGS) -c \
             $(GOOGLE_DIR)/src/gtest-all.cc -o $(GOOGLE_DIR)/google_test_lib
 
-yashe_basic_tests.o: Yashe.o $(GOOGLE_DIR)/google_test_lib yashe_basic_tests.cpp $(GOOGLE_HEADERS)
-	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) yashe_basic_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_OBJ) $(LDFLAGS) -o yashe_basic_tests.o
+yashe_basic_tests.o: yashe.a $(GOOGLE_DIR)/google_test_lib yashe_basic_tests.cpp $(GOOGLE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) yashe_basic_tests.cpp $(GOOGLE_DIR)/google_test_lib $(SRC_DIR)/yashe.a $(LDFLAGS) -o yashe_basic_tests.o
 
-yashe_vectorial_tests.o: Yashe.o $(GOOGLE_DIR)/google_test_lib yashe_vectorial_tests.cpp $(GOOGLE_HEADERS)
-	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_vectorial_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_OBJ) $(LDFLAGS) -o yashe_vectorial_tests.o
+yashe_vectorial_tests.o: yashe.a $(GOOGLE_DIR)/google_test_lib yashe_vectorial_tests.cpp $(GOOGLE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_vectorial_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_LIB) $(LDFLAGS) -o yashe_vectorial_tests.o
 
-yashe_matrix_tests.o: Yashe.o $(GOOGLE_DIR)/google_test_lib yashe_matrix_tests.cpp $(GOOGLE_HEADERS)
-	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_matrix_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_OBJ) $(LDFLAGS) -o yashe_matrix_tests.o
+yashe_matrix_tests.o: yashe.a $(GOOGLE_DIR)/google_test_lib yashe_matrix_tests.cpp $(GOOGLE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_matrix_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_LIB) $(LDFLAGS) -o yashe_matrix_tests.o
 
-yashe_symmetric_matrix_tests.o: Yashe.o $(GOOGLE_DIR)/google_test_lib yashe_symmetric_matrix_tests.cpp $(GOOGLE_HEADERS)
-	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_symmetric_matrix_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_OBJ) $(LDFLAGS) -o yashe_symmetric_matrix_tests.o
+yashe_symmetric_matrix_tests.o: yashe.a $(GOOGLE_DIR)/google_test_lib yashe_symmetric_matrix_tests.cpp $(GOOGLE_HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDES) $(CXXFLAGS) $(SRC_DIR)/vectorutils.h yashe_symmetric_matrix_tests.cpp $(GOOGLE_DIR)/google_test_lib $(YASHE_LIB) $(LDFLAGS) -o yashe_symmetric_matrix_tests.o
 
 
-Yashe.o: ../src/Makefile
-	cd ../src/ && make
+yashe.a: $(SRC_DIR)/Makefile
+	make -C $(SRC_DIR)
 
 clean:
 	rm -rf *.o $(OBJ_GENERATED)

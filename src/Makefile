@@ -7,10 +7,15 @@ SOURCES 	= 	$(wildcard *.cpp)
 HEADERS 	= 	$(wildcard *.h)
 OBJECTS 	= 	$(SOURCES:.cpp=.o)
 
-all: $(OBJECTS) 
+all: $(OBJECTS) pack_into_a_lib 
 
 $(OBJECTS): Makefile $(HEADERS)
 
+
+pack_into_a_lib:
+	ar rs yashe.a  *.o > /dev/null 2>&1
+
+
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) yashe.a
