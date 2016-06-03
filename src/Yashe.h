@@ -106,7 +106,7 @@ class Yashe {
 	Yashe(const struct YASHEParams& params);
 	Yashe(const Yashe& y);
 	Yashe(const std::string& filename);
-	void serialize(const std::string& filename);
+	void serialize(const std::string& filename) const;
 	void unserialize(const std::string& filename);
 
 	inline size_t	get_ell() const { return ell; }
@@ -119,8 +119,8 @@ class Yashe {
 	friend std::ostream& operator<<(std::ostream&, const Yashe&);
 
 	/* function to encrypt */
-	Ciphertext encrypt(const Plaintext&);
-	RealNumberCiphertext encrypt(const RealNumberPlaintext&);
+	Ciphertext encrypt(const Plaintext&) const;
+	RealNumberCiphertext encrypt(const RealNumberPlaintext&) const;
 
 	define_function( encrypt, PlaintextVector, CiphertextVector);
 	define_function( encrypt, PlaintextMatrix, CiphertextMatrix);
@@ -128,31 +128,31 @@ class Yashe {
 	define_function( encrypt, RealNumberPlaintextMatrix, RealNumberCiphertextMatrix);
 
 	/* function to decrypt */
-	Plaintext decrypt(const Ciphertext&);
-	RealNumberPlaintext decrypt(const RealNumberCiphertext&);
+	Plaintext decrypt(const Ciphertext&) const;
+	RealNumberPlaintext decrypt(const RealNumberCiphertext&) const;
 	define_function(decrypt, CiphertextVector, PlaintextVector);
 	define_function(decrypt, CiphertextMatrix, PlaintextMatrix);
 	define_function(decrypt, RealNumberCiphertextVector, RealNumberPlaintextVector);
 	define_function(decrypt, RealNumberCiphertextMatrix, RealNumberPlaintextMatrix);
 
 	/* function to encode */
-	RealNumberPlaintext encode(const double& value, int exp_shift = 64);
+	RealNumberPlaintext encode(const double& value, int exp_shift = 64) const;
 	define_function(encode, DoubleVector, RealNumberPlaintextVector);
 	define_function(encode, DoubleMatrix, RealNumberPlaintextMatrix);
 
 	/* function to decode */
-	double decode(const RealNumberPlaintext& value);
+	double decode(const RealNumberPlaintext& value) const;
 	define_function(decode, RealNumberPlaintextVector, DoubleVector);
 	define_function(decode, RealNumberPlaintextMatrix, DoubleMatrix);
 
-	fmpz_mod_polyxx	convert(const fmpz_mod_polyxx&);
-	unsigned 		noise(const Ciphertext&);
+	fmpz_mod_polyxx	convert(const fmpz_mod_polyxx&) const;
+	unsigned 		noise(const Ciphertext&) const;
 
 	/* decrypt, decode, encode and encrypt.
 	 * This function can receive RealNumberCiphertext,
 	 * vectors and matrices of this type, etc... */
 	template<typename Ciphertext_like>
-	void recrypt(Ciphertext_like& c){
+	void recrypt(Ciphertext_like& c) const{
 		timing timing;
 		timing.start();
 		c = encrypt(encode(decode(decrypt(c))));
@@ -161,13 +161,13 @@ class Yashe {
 
 
 
-	SymmetricMatrix<RealNumberCiphertext> encrypt(const SymmetricMatrix<RealNumberPlaintext>& plain);
+	SymmetricMatrix<RealNumberCiphertext> encrypt(const SymmetricMatrix<RealNumberPlaintext>& plain) const;
 
-	SymmetricMatrix<RealNumberPlaintext> decrypt(const SymmetricMatrix<RealNumberCiphertext>& c);
+	SymmetricMatrix<RealNumberPlaintext> decrypt(const SymmetricMatrix<RealNumberCiphertext>& c) const ;
 
-	SymmetricMatrix<RealNumberPlaintext> encode(SymmetricMatrix<double> messages, int precision = 64);
+	SymmetricMatrix<RealNumberPlaintext> encode(SymmetricMatrix<double> messages, int precision = 64) const;
 
-	SymmetricMatrix<double> decode(SymmetricMatrix<RealNumberPlaintext> plain);
+	SymmetricMatrix<double> decode(SymmetricMatrix<RealNumberPlaintext> plain) const;
 
 };	
 #endif

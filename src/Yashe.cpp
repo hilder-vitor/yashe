@@ -86,7 +86,7 @@ unsigned noise_from_poly(const fmpz_mod_polyxx& cval, const fmpzxx &q, unsigned 
     return bitnoise;
 }
 
-void Yashe::serialize(const std::string& filename){
+void Yashe::serialize(const std::string& filename) const{
 	std::ofstream outFile(filename);
 	outFile << "n:" << n << endl;
 	outFile << "ell:" << ell << endl;
@@ -250,7 +250,7 @@ Yashe::Yashe(const struct YASHEParams& params){
     }
 }
 /* Encrypt a Plaintext */
-Ciphertext Yashe::encrypt(const Plaintext& m) {
+Ciphertext Yashe::encrypt(const Plaintext& m) const {
     fmpz_mod_polyxx cval(q);
     fmpz_mod_polyxx ps(q);
     fmpz_mod_polyxx delta_times_message(q);
@@ -266,13 +266,13 @@ Ciphertext Yashe::encrypt(const Plaintext& m) {
 }
 
 
-RealNumberCiphertext Yashe::encrypt(const RealNumberPlaintext& m) {
+RealNumberCiphertext Yashe::encrypt(const RealNumberPlaintext& m) const {
 	RealNumberCiphertext c(encrypt(static_cast<Plaintext>(m)), m.expoent_shift());
 	return c;
 }
 
 /* Decrypt */
-Plaintext Yashe::decrypt(const Ciphertext& c) {
+Plaintext Yashe::decrypt(const Ciphertext& c) const {
     fmpzxx coeff, diff;
     fmpz_polyxx g;
     if (c.aftermult)
@@ -299,7 +299,7 @@ Plaintext Yashe::decrypt(const Ciphertext& c) {
     return m;
 }
 
-RealNumberPlaintext Yashe::decrypt(const RealNumberCiphertext& c){
+RealNumberPlaintext Yashe::decrypt(const RealNumberCiphertext& c) const{
 	RealNumberPlaintext p(decrypt(static_cast<Ciphertext>(c)), c.expoent_shift());
 	return p;
 }
@@ -322,7 +322,7 @@ void WordDecomp( std::vector<fmpz_mod_polyxx> &P, const fmpz_mod_polyxx &x )
     }
 }
 
-fmpz_mod_polyxx Yashe::convert(const fmpz_mod_polyxx& cval) {
+fmpz_mod_polyxx Yashe::convert(const fmpz_mod_polyxx& cval) const {
     fmpz_mod_polyxx result(q);
 
     std::vector<fmpz_mod_polyxx> P(logwq, fmpz_mod_polyxx(q));
@@ -339,7 +339,7 @@ fmpz_mod_polyxx Yashe::convert(const fmpz_mod_polyxx& cval) {
 }
 
 /* Get real noise */
-unsigned Yashe::noise(const Ciphertext& _c){
+unsigned Yashe::noise(const Ciphertext& _c) const{
 	Ciphertext c = _c;
 	c.convert_self();
 	unsigned bitnoise = 0;
@@ -362,7 +362,7 @@ unsigned Yashe::noise(const Ciphertext& _c){
 }
 
 
-RealNumberPlaintext Yashe::encode(const double& _message, int exp_shift){
+RealNumberPlaintext Yashe::encode(const double& _message, int exp_shift) const{
 	double message = _message;
 	int signal = (message > 0 ? 1 : -1);
 	message *= signal;
@@ -390,11 +390,11 @@ RealNumberPlaintext Yashe::encode(const double& _message, int exp_shift){
 	return plain;
 }
 
-double Yashe::decode(const RealNumberPlaintext& value){
+double Yashe::decode(const RealNumberPlaintext& value) const{
 	return value.double_value();
 }
 
-SymmetricMatrix<RealNumberCiphertext> Yashe::encrypt(const SymmetricMatrix<RealNumberPlaintext>& plain){
+SymmetricMatrix<RealNumberCiphertext> Yashe::encrypt(const SymmetricMatrix<RealNumberPlaintext>& plain) const{
 	unsigned int N = plain.size();
 	RealNumberCiphertext c = encrypt(plain.get(0, 0));
 	SymmetricMatrix<RealNumberCiphertext> C(N, c);
@@ -407,7 +407,7 @@ SymmetricMatrix<RealNumberCiphertext> Yashe::encrypt(const SymmetricMatrix<RealN
 	return C;
 }
 
-SymmetricMatrix<RealNumberPlaintext> Yashe::decrypt(const SymmetricMatrix<RealNumberCiphertext>& c){
+SymmetricMatrix<RealNumberPlaintext> Yashe::decrypt(const SymmetricMatrix<RealNumberCiphertext>& c) const{
 	unsigned int N = c.size();
 	RealNumberPlaintext plain = encode(1.0, 0);
 	SymmetricMatrix<RealNumberPlaintext> P(N, plain);
@@ -420,7 +420,7 @@ SymmetricMatrix<RealNumberPlaintext> Yashe::decrypt(const SymmetricMatrix<RealNu
 	return P;
 }
 
-SymmetricMatrix<RealNumberPlaintext> Yashe::encode(SymmetricMatrix<double> messages, int precision){
+SymmetricMatrix<RealNumberPlaintext> Yashe::encode(SymmetricMatrix<double> messages, int precision) const{
 	unsigned int N = messages.size();
 	RealNumberPlaintext plain = encode(1.0, 0);
 	SymmetricMatrix<RealNumberPlaintext> P(N, plain);
@@ -434,7 +434,7 @@ SymmetricMatrix<RealNumberPlaintext> Yashe::encode(SymmetricMatrix<double> messa
 	return P;
 }
 
-SymmetricMatrix<double> Yashe::decode(SymmetricMatrix<RealNumberPlaintext> plain){
+SymmetricMatrix<double> Yashe::decode(SymmetricMatrix<RealNumberPlaintext> plain) const{
 	unsigned int N = plain.size();
 	SymmetricMatrix<double> messages(N, 0.0);
 	double value;

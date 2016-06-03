@@ -169,7 +169,7 @@ vector<vector<ELEMENT> > operator*(const vector<vector<ELEMENT> >& A, const vect
 			for (unsigned int k = 1; k < P; k++){
 				innerProduct = innerProduct + A[i][k] * B[k][j];
 			}
-			C[i] = innerProduct;
+			C[i][j] = innerProduct;
 		}
 	}
 	return C;

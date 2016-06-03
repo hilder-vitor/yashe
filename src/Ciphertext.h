@@ -55,14 +55,14 @@ class Yashe;
 
 class Ciphertext {
     protected:
-	Yashe&	yashe;
-	unsigned long 	level;
+	const Yashe& yashe;
+	unsigned long level;
     
     public:
     fmpz_mod_polyxx cval;
     bool		aftermult;
-	Ciphertext(Yashe&, const fmpz_mod_polyxx& poly); 
-	Ciphertext(Yashe& scheme, const std::string& filename);
+	Ciphertext(const Yashe&, const fmpz_mod_polyxx& poly); 
+	Ciphertext(const Yashe& scheme, const std::string& filename);
 	Ciphertext(const Ciphertext& c);
 	
 	inline const fmpz_mod_polyxx get_cval() const { return cval; }

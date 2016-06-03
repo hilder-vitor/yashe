@@ -45,12 +45,12 @@ knowledge of the CeCILL license and that you accept its terms.
 #include "Yashe.h"
 
 /* Constructors */
-Ciphertext::Ciphertext(Yashe& pk, const fmpz_mod_polyxx& poly) : 
+Ciphertext::Ciphertext(const Yashe& pk, const fmpz_mod_polyxx& poly) : 
     yashe(pk), level(0), cval(poly), aftermult(false)
 {
 }
 
-Ciphertext::Ciphertext(Yashe& scheme, const std::string& filename) : yashe(scheme), level(0), cval(scheme.q), aftermult(false) {
+Ciphertext::Ciphertext(const Yashe& scheme, const std::string& filename) : yashe(scheme), level(0), cval(scheme.q), aftermult(false) {
 	unserialize(filename);
 }
 

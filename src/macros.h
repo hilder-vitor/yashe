@@ -26,7 +26,7 @@ knowledge of the CeCILL license and that you accept its terms.
  *  vector<Plaintext>, vector<Ciphertext>, vector<vector<Plaintext> >, etc
  *----------------------------------------------------------------------------*/
 #define define_function(name, from_type, to_type)\
-	to_type name ( const from_type & _vec_or_matrix_ ){\
+	to_type name ( const from_type & _vec_or_matrix_ ) const{\
 		unsigned int N = _vec_or_matrix_.size();\
 		to_type dest;\
 		for (unsigned int i =0; i < N; i++)\
