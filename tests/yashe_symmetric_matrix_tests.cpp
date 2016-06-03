@@ -365,11 +365,17 @@ TEST(YASHE_symmetric_covariance, double_values_matrix_N8_P4){
 }
 
 GTEST_API_ int main(int argc, char **argv) {
-	string baseFileName("../keys/1455824090_yashe.keys");
-	cout << "Loading yashe." << endl;
-	yashe = new Yashe(baseFileName);
+	string fileName("../keys/L4_t2to32_yashe.keys");
+	std::ifstream inFile(fileName);
+	if (inFile.good()){
+		cout << "Loading yashe." << endl;
+		yashe = new Yashe(fileName);
+	}else{
+		cout << "Generating keys." << endl;
+		yashe = new Yashe(params_L4_t2to32);
+		yashe->serialize(fileName);
+	}
 	cout << "Starting tests." << endl;
-
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

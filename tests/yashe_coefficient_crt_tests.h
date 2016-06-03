@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include "Yashe.h"
+#include "test_params.h"
 #include "vectorutils.h"
 #include "CoefficientwiseCRT.h"
 #include "gtest/gtest.h"
