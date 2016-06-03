@@ -13,7 +13,7 @@ GOOGLE_DIR = googletest
 SRC_DIR = ../src
 
 INCLUDES = -I/home/vitor/mylibs/gmp/include -I/home/vitor/mylibs/mpfr/include  -I/home/vitor/mylibs/flint/include -I$(SRC_DIR)
-LDFLAGS 	= 	-L/opt/local/lib   -L/home/vitor/mylibs/flint/lib/ -L/home/vitor/mylibs/gmp/lib/ -L/home/vitor/mylibs/mpfr/lib/ -lgmp -lgmpxx -lcrypto -lm -lmpfr -lflint -pthread
+LDFLAGS 	= 	-L/opt/local/lib   -L/home/vitor/mylibs/flint/lib/ -L/home/vitor/mylibs/gmp/lib/ -L/home/vitor/mylibs/mpfr/lib/ -lgmp -lgmpxx -lcrypto -lm -lmpfr -lflint -pthread -fopenmp
 
 
 YASHE_OBJ=$(SRC_DIR)/Plaintext.o $(SRC_DIR)/RealNumberPlaintext.o $(SRC_DIR)/Ciphertext.o $(SRC_DIR)/RealNumberCiphertext.o $(SRC_DIR)/Sampler.o $(SRC_DIR)/Entropy.o $(SRC_DIR)/Yashe.o $(SRC_DIR)/timing.o

@@ -97,14 +97,14 @@ TEST (YASHE_outer_product, double_values_u_and_v){
 	outer[2] = {-231.76080, 75.66990, -63.61834, -239189.50618};
 	outer[3] = {3.16800, -1.034352, 0.869616, 3269.54496};
 
-	DoubleMatrix calculated = outerProduct(u, v);
+	DoubleMatrix calculated = outer_product(u, v);
 	EXPECT_MATRIX_DOUBLE_EQ(outer, calculated, "outer product of u and v.");
 }
 
 TEST (YASHE_outer_product, double_values_u_and_u){
 	DoubleVector u = {0.9, 918.3, -19.3134, .264};
 
-	SymmetricMatrix<double> sym = outerProduct(u);
+	SymmetricMatrix<double> sym = outer_product(u);
 	SymmetricMatrix<double> expected(4, 0.0);
 	expected.set(0.8100000, 0, 0);
 	expected.set(826.47, 1, 0); expected.set(843274.8900000, 1, 1);
@@ -127,7 +127,7 @@ TEST (YASHE_outer_product, encrypted_values_u_and_v){
 	RealNumberCiphertextVector encU = yashe->encrypt(yashe->encode(u));
 	RealNumberCiphertextVector encV = yashe->encrypt(yashe->encode(v));
 
-	RealNumberCiphertextMatrix calculated = outerProduct(encU, encV);
+	RealNumberCiphertextMatrix calculated = outer_product(encU, encV);
 	EXPECT_MATRIX_DOUBLE_EQ(outer, yashe->decode(yashe->decrypt(calculated)), "outer product of u and v.");
 }
 
@@ -141,7 +141,7 @@ TEST (YASHE_outer_product, encrypted_values_u_and_u){
 	expected.set(0.2376000, 3, 0); expected.set(242.4312000, 3, 1); expected.set(-5.0987376, 3, 2); expected.set(0.0696960, 3, 3);
 
 	RealNumberCiphertextVector encU = yashe->encrypt(yashe->encode(u));
-	SymmetricMatrix<RealNumberCiphertext> sym = outerProduct(encU);
+	SymmetricMatrix<RealNumberCiphertext> sym = outer_product(encU);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(expected, yashe->decode(yashe->decrypt(sym)), "outer product of u and u." );
 }
@@ -162,7 +162,7 @@ TEST(YASHE_multiply_transpose, double_values_N5_P3){
 	expected.set(12314.8642500, 1, 0);expected.set(84312802.7425000221, 1, 1);
 	expected.set(752215.0004890, 2, 0);expected.set(-810664.9857500001, 2, 1);expected.set(810614735.4434889555, 2, 2);
 
-	SymmetricMatrix<double> calculated = multiplyTransposeMatrixByMatrix(A);
+	SymmetricMatrix<double> calculated = multiply_transpose_matrix_by_matrix(A);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(expected, calculated, "A' * A" );
 }
@@ -183,7 +183,7 @@ TEST(YASHE_multiply_transpose, double_values_N3_P6){
 	E.set(10.3273509, 4, 0); E.set(172843.9418670, 4, 1); E.set(12264.084925, 4, 2); E.set(710096.3955563001, 4, 3); E.set(84315627.0801513046, 4, 4);
 	E.set(37.162089, 5, 0); E.set(337799.6020700001, 5,1); E.set(13812.80625, 5,2); E.set(-6487.135577, 5, 3); E.set(-829421.7177491001, 5, 4); E.set(42505.033489, 5, 5);
 
-	SymmetricMatrix<double> calculated = multiplyTransposeMatrixByMatrix(A);
+	SymmetricMatrix<double> calculated = multiply_transpose_matrix_by_matrix(A);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(E, calculated, "A' * A" );
 }
@@ -310,7 +310,7 @@ TEST(YASHE_symmetric_covariance, double_values_matrix_N6_P3){
 	expected.set(-3226.79683060000, 1, 0); expected.set(5163.72740934, 1, 1);
 	expected.set(2704.93346175000,2,0); expected.set(-2283.85849926200, 2, 1); expected.set(2861.0016390976, 2, 2);
 
-	SymmetricMatrix<double> C = calculateCovariance(X);
+	SymmetricMatrix<double> C = calculate_covariance(X);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(expected, C);
 }
@@ -333,7 +333,7 @@ TEST(YASHE_symmetric_covariance, encrypted_values_matrix_N6_P3){
 
 	RealNumberCiphertextMatrix cX = yashe->encrypt(yashe->encode(X));
 
-	SymmetricMatrix<RealNumberCiphertext> C = calculateCovariance(cX);
+	SymmetricMatrix<RealNumberCiphertext> C = calculate_covariance(cX);
 	SymmetricMatrix<RealNumberPlaintext> S = yashe->decrypt(C);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(expected, yashe->decode(yashe->decrypt(C)));
@@ -359,7 +359,7 @@ TEST(YASHE_symmetric_covariance, double_values_matrix_N8_P4){
 	expected.set(500.51231543694, 2, 0); expected.set(-2683.44876950469, 2, 1); expected.set(19613.74615190041,2, 2);
 	expected.set(-167.61952464898, 3, 0); expected.set(-2833.22457586510, 3, 1); expected.set(-73.82082653347,3,2); expected.set(19678.44629570449, 3,3);
 
-	SymmetricMatrix<double> C = calculateCovariance(X);
+	SymmetricMatrix<double> C = calculate_covariance(X);
 
 	EXPECT_SYMMETRIC_MATRIX_DOUBLE_EQ(expected, C);
 }
