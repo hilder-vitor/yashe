@@ -55,6 +55,27 @@ CyclotomicwiseCRT::CyclotomicwiseCRT(const std::vector<flint::fmpz_mod_polyxx>& 
 	}
 }
 
+flint::fmpz_mod_polyxx CyclotomicwiseCRT::n_th_cyclotomic_mod_t(unsigned int n, const fmpzxx t){
+	fmpz_polyxx poly;
+	arith_cyclotomic_polynomial(poly._data().inner, n);
+
+	fmpz_mod_polyxx cyclotomic_mod_t(t);
+	cyclotomic_mod_t = poly;
+	return cyclotomic_mod_t;
+}
+
+std::vector<flint::fmpz_mod_polyxx> CyclotomicwiseCRT::factorize_cyclotomic(const fmpz_mod_polyxx& cyclotomic){
+	fmpz_mod_poly_factorxx factors = fmpz_mod_poly_factorxx(factor_cantor_zassenhaus(cyclotomic));
+	vector<fmpz_mod_polyxx> vec_factors;
+    for (unsigned i=0; i < factors.size(); i++){
+		cout << "factor " << i << ":   ";
+		vec_factors.push_back(fmpz_mod_polyxx(factors.p(i)));
+		print_pretty(vec_factors[i], "x");
+		cout << endl;
+	}
+	return vec_factors;
+}
+
 const flint::fmpz_mod_polyxx& CyclotomicwiseCRT::get_modulus() const{
 	return poly_modulus;
 }

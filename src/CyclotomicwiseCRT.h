@@ -21,6 +21,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 #include "flint/fmpz_mod_polyxx.h"
 #include "flint/fmpqxx.h"
+#include "flint/arith.h"
 #include <vector>
 #include "Plaintext.h"
 
@@ -40,6 +41,13 @@ class CyclotomicwiseCRT {
 
     public:
 	CyclotomicwiseCRT(const std::vector<flint::fmpz_mod_polyxx>& coprimes);
+
+	/* This function returns the n-th cyclotomic polynomial with coefficients reduced mod t
+	 * (which means it is represented as an element of Z_t[x]) */
+	static flint::fmpz_mod_polyxx n_th_cyclotomic_mod_t(unsigned int n, const fmpzxx t);
+	/* This method receives a cyclotomic polynomial with coefficients in Z_t and factors it
+	 * in polynomials in Z_t[x].                                                              */
+	static std::vector<flint::fmpz_mod_polyxx> factorize_cyclotomic(const fmpz_mod_polyxx& cyclotomic);
 
 	const flint::fmpz_mod_polyxx& get_modulus() const;
 
