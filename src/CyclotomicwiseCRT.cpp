@@ -80,6 +80,10 @@ const flint::fmpz_mod_polyxx& CyclotomicwiseCRT::get_modulus() const{
 	return poly_modulus;
 }
 
+const std::vector<flint::fmpz_mod_polyxx>& CyclotomicwiseCRT::get_coprimes() const{
+	return coprimes;
+}
+
 Plaintext CyclotomicwiseCRT::pack(const std::vector<Plaintext>& remainders){
 	fmpz_mod_polyxx poly(t);
 	for (unsigned int i = 0; i < coprimes.size(); i++)

@@ -61,6 +61,7 @@ class Plaintext {
 	fmpzxx modulus() const;
 	const fmpz_mod_polyxx& cyclotomic() const;
 	fmpz_mod_polyxx polynomial() const;
+	bool is_zero() const;
 };
 
 #endif

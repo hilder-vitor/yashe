@@ -30,17 +30,18 @@ class CoefficientwiseCRT {
 	std::vector<flint::fmpzxx> coprimes;
 	flint::fmpzxx modulus; // product of the coprimes
 
-	flint::fmpzxx integerCRT(std::vector<flint::fmpzxx> remainders);
-	std::vector<flint::fmpzxx> invIntegerCRT(flint::fmpzxx x);
+	flint::fmpzxx integerCRT(std::vector<flint::fmpzxx> remainders) const;
+	std::vector<flint::fmpzxx> invIntegerCRT(flint::fmpzxx x) const;
     
     public:
 	CoefficientwiseCRT(const std::vector<flint::fmpzxx>& coprimes, const flint::fmpz_mod_polyxx& cyclo); 
 
 	fmpzxx get_modulus() const;
+	const std::vector<flint::fmpzxx>& get_coprimes() const;
 
-	Plaintext pack(std::vector<Plaintext> remainders);
+	Plaintext pack(std::vector<Plaintext> remainders) const;
 	
-	std::vector<Plaintext> unpack(Plaintext remainders);
+	std::vector<Plaintext> unpack(Plaintext remainders) const;
 	
 };	
 

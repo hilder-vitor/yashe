@@ -50,6 +50,8 @@ class CyclotomicwiseCRT {
 	static std::vector<flint::fmpz_mod_polyxx> factorize_cyclotomic(const fmpz_mod_polyxx& cyclotomic);
 
 	const flint::fmpz_mod_polyxx& get_modulus() const;
+	
+	const std::vector<flint::fmpz_mod_polyxx>& get_coprimes() const;
 
 	Plaintext pack(const std::vector<Plaintext>& remainders);
 	

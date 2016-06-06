@@ -21,7 +21,7 @@ knowledge of the CeCILL license and that you accept its terms.
 using namespace flint;
 using namespace std;
 
-flint::fmpzxx CoefficientwiseCRT::integerCRT(vector<flint::fmpzxx> remainders){
+flint::fmpzxx CoefficientwiseCRT::integerCRT(vector<flint::fmpzxx> remainders) const{
 	fmpzxx x("0");
     fmpzxx t = modulus;
 	fmpzxx t_;
@@ -34,7 +34,7 @@ flint::fmpzxx CoefficientwiseCRT::integerCRT(vector<flint::fmpzxx> remainders){
 	return x;
 }
 
-vector<flint::fmpzxx> CoefficientwiseCRT::invIntegerCRT(flint::fmpzxx x){
+vector<flint::fmpzxx> CoefficientwiseCRT::invIntegerCRT(flint::fmpzxx x) const{
 	unsigned int N = coprimes.size();
 	vector<fmpzxx> vec(coprimes.size());
 	for (unsigned int i = 0; i < N; i++){
@@ -56,29 +56,32 @@ fmpzxx product(const vector<fmpzxx>& numbers){
 CoefficientwiseCRT::CoefficientwiseCRT(const vector<flint::fmpzxx>& _coprimes, const flint::fmpz_mod_polyxx& cyclo) : cyclotomic(cyclo), coprimes(_coprimes), modulus(product(_coprimes)) {
 }
 
+const std::vector<flint::fmpzxx>& CoefficientwiseCRT::get_coprimes() const{
+	return coprimes;
+}
+
 fmpzxx CoefficientwiseCRT::get_modulus() const {
 	return modulus;
 }
 
 
-const Plaintext& maximum_degree(const vector<Plaintext>& polys){
+unsigned int maximum_degree(const vector<Plaintext>& polys){
 	unsigned int N = polys.size();
 	unsigned int max = 0;
 	for (unsigned int i = 1; i < N; i++){
-		if (polys[i].degree() > polys[max].degree())
-			max = i;
+		if (!polys[i].is_zero() && polys[i].degree() > max)
+			max = polys[i].degree();
 	}
-	return polys[max];
+	return max;
 }
 
 
-Plaintext CoefficientwiseCRT::pack(vector<Plaintext> polys){
+Plaintext CoefficientwiseCRT::pack(vector<Plaintext> polys) const{
 	unsigned int N = polys.size();
 	fmpzxx t = modulus;
 	vector<fmpzxx> coefficients(N);
 	Plaintext resp(t, cyclotomic);
-	unsigned int max_degree = maximum_degree(polys).degree();
-	cout << "max_degree = " << max_degree << endl;
+	unsigned int max_degree = maximum_degree(polys);
 	for (unsigned int i = 0; i <= max_degree; i++){
 		// pick the i-th coefficient of each polynomial
 		for (unsigned int j = 0; j < N; j++)
@@ -89,14 +92,14 @@ Plaintext CoefficientwiseCRT::pack(vector<Plaintext> polys){
 	return resp;
 }
 
-vector<Plaintext> CoefficientwiseCRT::unpack(Plaintext packaged){
+vector<Plaintext> CoefficientwiseCRT::unpack(Plaintext packaged) const{
 	unsigned int N = coprimes.size();
 	vector<Plaintext> polys;
 	
 	for (unsigned int i = 0; i < N; i++)
 		polys.push_back(Plaintext(coprimes[i], cyclotomic));
 	
-	unsigned int deg = packaged.degree();
+	unsigned int deg = (packaged.is_zero() ? 1 : packaged.degree());
 	for (unsigned int i = 0; i <= deg; i++){
 		fmpzxx p_coefficient(packaged.get(i));
 		vector<fmpzxx> coefficients = invIntegerCRT(p_coefficient);

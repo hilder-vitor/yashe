@@ -148,3 +148,6 @@ fmpz_mod_polyxx Plaintext::polynomial() const{
 	return p;
 }
 
+bool Plaintext::is_zero() const{
+	return pval.is_zero();
+}
